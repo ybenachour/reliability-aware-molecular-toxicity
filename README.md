@@ -2,6 +2,8 @@
 
 This repository contains the scientific source code and curated reproducibility artifacts supporting the study **Reliability-Aware Multi-Endpoint Molecular Toxicity Prediction under Scaffold Shift**.
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21921230.svg)](https://doi.org/10.5281/zenodo.21921230)
+
 The study evaluates six binary molecular assay endpoints: hERG blockade, Ames mutagenicity, and the Tox21 SR-p53, SR-ATAD5, SR-ARE, and SR-MMP endpoints. The workflow compares classical QSAR, neural-network, graph, and multitask models and evaluates scaffold-aware generalization, probability calibration, applicability-domain behavior, uncertainty, selective prediction, activity cliffs, and independent external validation.
 
 ## Release scope
@@ -71,7 +73,9 @@ The complete workflow may generate large local datasets, feature files, model bi
 
 ## Citation
 
-Citation metadata are provided in `CITATION.cff`. For the manuscript-linked release, cite **v1.0.0** and use the permanent Zenodo DOI once assigned.
+Software archive:
+
+**Benachour, Y. (2026). Reliability-Aware Molecular Toxicity Prediction (v1.0.0). Zenodo. https://doi.org/10.5281/zenodo.21921230**
 
 ## License
 
