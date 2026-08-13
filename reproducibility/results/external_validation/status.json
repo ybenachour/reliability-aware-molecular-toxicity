@@ -1,0 +1,20 @@
+{
+  "created_at": "2026-08-11T17:18:04.287164+00:00",
+  "status": "completed",
+  "profile": "full",
+  "seed": 20260723,
+  "bootstrap_iterations": 2000,
+  "validated_endpoints": [
+    "SR-ARE",
+    "SR-ATAD5",
+    "SR-MMP",
+    "SR-p53"
+  ],
+  "not_externally_validated_endpoints": [
+    "herg_blockade",
+    "ames_mutagenicity"
+  ],
+  "strict_external_predictions": 2235,
+  "claim": "External validation was performed only for the four Tox21 stress-response endpoints after exact-overlap exclusion.",
+  "limitations": "hERG and Ames were not externally validated."
+}

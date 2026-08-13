@@ -1,0 +1,67 @@
+endpoints:
+  herg_blockade:
+    display_name: hERG blockade
+    task: binary_classification
+    positive_label: blocker
+    negative_label: non_blocker
+    primary_metrics: [pr_auc, recall_at_precision_0.80, roc_auc, brier, ece, ad_coverage]
+    threshold_selection: maximize_recall_subject_to_precision
+    minimum_precision: 0.80
+    recommendation:
+      high: High-priority cardiotoxicity testing
+      intermediate: Experimental hERG confirmation recommended
+      low: Low predicted hERG concern; confirm experimentally as appropriate
+  ames_mutagenicity:
+    display_name: Ames mutagenicity
+    task: binary_classification
+    positive_label: mutagenic
+    negative_label: non_mutagenic
+    primary_metrics: [mcc, balanced_accuracy, pr_auc, brier, ece, ad_coverage]
+    threshold_selection: maximize_mcc
+    recommendation:
+      high: High-priority mutagenicity testing
+      intermediate: Experimental Ames confirmation recommended
+      low: Low predicted mutagenicity concern; confirm experimentally as appropriate
+  SR-p53:
+    display_name: Tox21 SR-p53 activity
+    assay_reference: "PubChem AID 720552; p53 stress-response reporter activity"
+    biological_interpretation: "Cellular p53 pathway reporter response; assay activity is not equivalent to clinical genotoxicity"
+    task: binary_classification
+    positive_label: active
+    negative_label: inactive
+    primary_metrics: [pr_auc, roc_auc, mcc, brier, ece]
+    threshold_selection: maximize_mcc
+  SR-ATAD5:
+    display_name: Tox21 SR-ATAD5 activity
+    assay_reference: "PubChem AID 720516; ATAD5 genotoxicity-associated reporter"
+    biological_interpretation: "ATAD5 reporter response associated with DNA-damage stress; assay activity is not a causal mechanism label"
+    task: binary_classification
+    positive_label: active
+    negative_label: inactive
+    primary_metrics: [pr_auc, roc_auc, mcc, brier, ece]
+    threshold_selection: maximize_mcc
+  SR-ARE:
+    display_name: Tox21 SR-ARE activity
+    assay_reference: "PubChem AID 743219; antioxidant response element reporter activity"
+    biological_interpretation: "ARE/Nrf2-associated cellular stress reporter response; may include assay interference"
+    task: binary_classification
+    positive_label: active
+    negative_label: inactive
+    primary_metrics: [pr_auc, roc_auc, mcc, brier, ece]
+    threshold_selection: maximize_mcc
+  SR-MMP:
+    display_name: Tox21 SR-MMP activity
+    assay_reference: "PubChem summary AID 720637; confirmatory project AID 720635"
+    biological_interpretation: "Disruption of mitochondrial membrane potential in a cell-based assay"
+    task: binary_classification
+    positive_label: active
+    negative_label: inactive
+    primary_metrics: [pr_auc, roc_auc, mcc, brier, ece]
+    threshold_selection: maximize_mcc
+
+abstention:
+  outside_domain: true
+  uncertainty_threshold: 0.20
+  minimum_nearest_similarity: 0.30
+  borderline_similarity: 0.45
+  recommendation: "Prediction unsupported; experimental testing recommended"

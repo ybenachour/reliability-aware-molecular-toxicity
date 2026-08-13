@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+title: "Reliability-Aware Multi-Endpoint Molecular Toxicity Prediction under Scaffold Shift"
+message: "If you use this software, please cite the archived software release and the associated manuscript, and cite the original data sources as applicable."
+type: software
+authors:
+  - family-names: Benachour
+    given-names: Yassine
+version: 1.0.0
+date-released: 2026-08-12
+license: BSD-3-Clause
+keywords:
+  - computational toxicology
+  - cheminformatics
+  - QSAR
+  - molecular machine learning
+  - hERG
+  - Ames
+  - Tox21
+  - scaffold split
+  - applicability domain
+  - uncertainty quantification
+  - selective prediction

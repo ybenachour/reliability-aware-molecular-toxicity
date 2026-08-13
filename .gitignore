@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Private/commercial interface
+/app/
+
+# Local/run artifacts
+/logs/
+/runs/
+/reports/executed_notebooks/
+
+# Source datasets and regenerated molecular tables
+# Raw/source datasets are not redistributed in the public research release.
+/data/
+*.tab
+
+# Trained model binaries and checkpoints
+/models/
+*.joblib
+*.pt
+*.pth
+*.ckpt
+
+# Regenerated development outputs outside the curated reproducibility snapshot
+/results/
+/tables/
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,7 @@
+endpoint,model,output,records
+herg_blockade,svm,D:\Dropbox\Work\Learning\Python\toxicity_screening_project\figures\reliability_herg_blockade.png,1883
+ames_mutagenicity,svm,D:\Dropbox\Work\Learning\Python\toxicity_screening_project\figures\reliability_ames_mutagenicity.png,1120
+SR-p53,xgboost,D:\Dropbox\Work\Learning\Python\toxicity_screening_project\figures\reliability_SR-p53.png,986
+SR-ATAD5,svm,D:\Dropbox\Work\Learning\Python\toxicity_screening_project\figures\reliability_SR-ATAD5.png,1027
+SR-ARE,svm,D:\Dropbox\Work\Learning\Python\toxicity_screening_project\figures\reliability_SR-ARE.png,847
+SR-MMP,svm,D:\Dropbox\Work\Learning\Python\toxicity_screening_project\figures\reliability_SR-MMP.png,842

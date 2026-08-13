@@ -1,0 +1,19 @@
+{
+  "atom_feature_dim": 15,
+  "bond_feature_dim": 7,
+  "atom_features": [
+    "atomic_number",
+    "degree",
+    "formal_charge",
+    "hybridization",
+    "aromatic",
+    "total_h",
+    "chirality"
+  ],
+  "bond_features": [
+    "bond_type",
+    "conjugated",
+    "in_ring",
+    "stereo"
+  ]
+}

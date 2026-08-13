@@ -1,0 +1,5 @@
+original_smiles,failure_reason
+[SbH6+3],"AtomValenceException: Explicit valence for atom # 0 Sb, 9, is greater than permitted"
+[SbH6+3],"AtomValenceException: Explicit valence for atom # 0 Sb, 9, is greater than permitted"
+[SbH6+3],"AtomValenceException: Explicit valence for atom # 0 Sb, 9, is greater than permitted"
+[SbH6+3],"AtomValenceException: Explicit valence for atom # 0 Sb, 9, is greater than permitted"

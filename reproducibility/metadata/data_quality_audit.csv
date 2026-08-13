@@ -1,0 +1,7 @@
+endpoint,raw_records,unique_keys,exact_duplicate_rows,duplicate_molecules,conflicting_molecules,valid_records,missing_labels,positive_count,negative_count,positive_prevalence,unique_scaffolds,policy_selected
+herg_blockade,13445,12966,0,462,17,13445,0,6718,6727,0.4996653030866493,5922,remove_conflicts
+ames_mutagenicity,7278,7248,0,30,2,7278,0,3974,3304,0.5460291288815609,1577,remove_conflicts
+SR-p53,7830,7612,0,161,5,7830,1057,423,6350,0.06245386091835228,2271,remove_conflicts
+SR-ATAD5,7830,7612,0,161,2,7830,759,264,6807,0.037335596096733134,2271,remove_conflicts
+SR-ARE,7830,7612,0,161,16,7830,1999,942,4889,0.16155033441948208,2271,remove_conflicts
+SR-MMP,7830,7612,0,161,8,7830,2020,918,4892,0.15800344234079175,2271,remove_conflicts

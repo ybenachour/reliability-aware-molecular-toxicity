@@ -1,0 +1,44 @@
+seed: 20260723
+device: auto
+profiles:
+  smoke:
+    repeated_runs: 1
+    optuna_trials: 3
+    max_epochs: 5
+    patience: 2
+    ensemble_members: 2
+    bootstrap_iterations: 200
+    sample_cap_per_endpoint: 2500
+  full:
+    repeated_runs: 5
+    optuna_trials: 50
+    max_epochs: 150
+    patience: 20
+    ensemble_members: 5
+    bootstrap_iterations: 2000
+    sample_cap_per_endpoint: null
+
+optimizer:
+  name: AdamW
+  learning_rate: 0.001
+  weight_decay: 0.0001
+scheduler:
+  name: ReduceLROnPlateau
+  factor: 0.5
+  patience: 5
+gradient_clip_norm: 5.0
+batch_size: 128
+num_workers: 0
+mixed_precision: false
+
+class_weighting:
+  enabled: true
+  method: positive_class_ratio
+multitask:
+  task_weighting: inverse_label_count_sqrt
+  missing_label_value: null
+  masked_loss: true
+
+thresholds:
+  selection_partition: validation
+  never_tune_on_test: true

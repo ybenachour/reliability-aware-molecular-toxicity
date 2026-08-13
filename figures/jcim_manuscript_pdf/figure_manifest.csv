@@ -1,0 +1,11 @@
+figure,file,description,source_files,dpi,format
+Fig01_endpoint_data_landscape,figures\jcim_manuscript_pdf\Fig01_endpoint_data_landscape.pdf,Observed/missing endpoint labels and positive-class prevalence.,tables\manuscript_endpoint_summary.csv,500,PDF
+Fig02_scaffold_test_pr_auc,figures\jcim_manuscript_pdf\Fig02_scaffold_test_pr_auc.pdf,pr_auc across models on the primary global-scaffold test set.,tables\manuscript_model_comparison.csv,500,PDF
+FigS01_scaffold_test_mcc,figures\jcim_manuscript_pdf\FigS01_scaffold_test_mcc.pdf,mcc across models on the primary global-scaffold test set.,tables\manuscript_model_comparison.csv,500,PDF
+FigS02_scaffold_test_brier,figures\jcim_manuscript_pdf\FigS02_scaffold_test_brier.pdf,brier across models on the primary global-scaffold test set.,tables\manuscript_model_comparison.csv,500,PDF
+Fig03_reliability_tradeoff,figures\jcim_manuscript_pdf\Fig03_reliability_tradeoff.pdf,Endpoint-level PR-AUC versus Brier score for selected calibrated models.,tables\manuscript_calibration.csv,500,PDF
+Fig04_applicability_domain_abstention,figures\jcim_manuscript_pdf\Fig04_applicability_domain_abstention.pdf,Applicability-domain support rates and accuracy in supported strata.,tables\manuscript_ad.csv,500,PDF
+Fig05_activity_cliffs,figures\jcim_manuscript_pdf\Fig05_activity_cliffs.pdf,Activity-cliff counts and Tanimoto similarity distributions.,tables\manuscript_cliffs.csv; results\activity_cliffs\cliff_pairs.csv,500,PDF
+Fig06_multitask_transfer,figures\jcim_manuscript_pdf\Fig06_multitask_transfer.pdf,Endpoint-specific change in PR-AUC from single-task to multitask learning.,results\ablations\negative_transfer.csv,500,PDF
+Fig07_external_validation,figures\jcim_manuscript_pdf\Fig07_external_validation.pdf,Internal scaffold-test versus external PR-AUC and supported coverage.,tables\manuscript_calibration.csv; results\external_validation\external_metrics.csv,500,PDF
+FigS03_repeated_scaffold_pr_auc,figures\jcim_manuscript_pdf\FigS03_repeated_scaffold_pr_auc.pdf,Repeated scaffold-split PR-AUC means and 95% confidence intervals.,results\metrics\qsar_repeated_scaffold_summary.csv,500,PDF

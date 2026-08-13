@@ -1,0 +1,80 @@
+project_root: .
+seed: 20260723
+execution_profile: full
+raw_dir: data/raw
+interim_dir: data/interim
+processed_dir: data/processed
+metadata_dir: data/metadata
+external_dir: data/external
+
+sources:
+  herg:
+    dataset_name: hERG_Karim
+    provider: Therapeutics Data Commons
+    acquisition_method: pytdc
+    tdc_task: Tox
+    tdc_name: hERG_Karim
+    official_url: https://tdcommons.ai/single_pred_tasks/tox/
+    version: pytdc-1.1.15 snapshot at acquisition
+    license: "TDC page is ambiguous: it displays 'Not Specified' and a CC BY 4.0 link; verify original-source terms before redistribution."
+    citation: "Karim et al. CardioTox net. Journal of Cheminformatics 13, 60 (2021). DOI: 10.1186/s13321-021-00541-z"
+    raw_filename: herg_karim_tdc.csv
+    endpoint: herg_blockade
+    label_column: Y
+    smiles_column: Drug
+    label_definition: "1 if hERG blocker with reported IC50 < 10 uM; 0 if >= 10 uM"
+    measurement_units: uM
+    assay_context: "Integrated literature/database classification; source-level assay heterogeneity expected"
+  ames:
+    dataset_name: AMES
+    provider: Therapeutics Data Commons
+    acquisition_method: pytdc
+    tdc_task: Tox
+    tdc_name: AMES
+    official_url: https://tdcommons.ai/single_pred_tasks/tox/
+    version: pytdc-1.1.15 snapshot at acquisition
+    license: "TDC page is ambiguous: it displays 'Not Specified' and a CC BY 4.0 link; verify original-source terms before redistribution."
+    citation: "Xu et al. In silico prediction of chemical Ames mutagenicity. JCIM 52 (2012) 2840-2847. DOI: 10.1021/ci300400a"
+    raw_filename: ames_tdc.csv
+    endpoint: ames_mutagenicity
+    label_column: Y
+    smiles_column: Drug
+    label_definition: "1 mutagenic; 0 non-mutagenic in the aggregated benchmark"
+    measurement_units: binary
+    assay_context: "Aggregated from four publications; strain and metabolic activation are not present in the TDC table"
+  tox21:
+    dataset_name: Tox21_MoleculeNet
+    provider: NCATS Tox21 Challenge via DeepChem/MoleculeNet mirror
+    acquisition_method: url
+    download_url: https://deepchemdata.s3-us-west-1.amazonaws.com/datasets/tox21.csv.gz
+    official_url: https://tripod.nih.gov/tox21/challenge/data.jsp
+    version: 2014 challenge training data / current DeepChem mirror
+    license: "No explicit dataset-specific license was located on the NCATS challenge page; U.S. government public-data access does not by itself establish redistribution terms. Record source terms at download time."
+    citation: "Tox21 Data Challenge 2014; MoleculeNet: Wu et al., Chemical Science 9 (2018) 513-530, DOI: 10.1039/C7SC02664A"
+    raw_filename: tox21.csv.gz
+    endpoint: tox21_multilabel
+    smiles_column: smiles
+    label_columns: [SR-p53, SR-ATAD5, SR-ARE, SR-MMP]
+    label_definition: "1 active; 0 inactive; blank missing/unavailable"
+    measurement_units: binary assay activity
+    assay_context: "High-throughput in vitro stress-response assays"
+
+download:
+  timeout_seconds: 120
+  retries: 3
+  chunk_bytes: 1048576
+  user_agent: toxicity-screening-research/0.1
+
+standardization:
+  fragment_policy: largest_organic_fragment_by_heavy_atoms_then_molecular_weight
+  normalize: true
+  reionize: true
+  uncharge: true
+  remove_isotopes: false
+  preserve_stereochemistry: true
+  canonical_isomeric_smiles: true
+
+splits:
+  fractions: [0.70, 0.15, 0.15]
+  repeated_scaffold_seeds: [20260723, 20260724, 20260725, 20260726, 20260727]
+  global_multitask: true

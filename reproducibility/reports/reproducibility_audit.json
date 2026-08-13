@@ -1,0 +1,9 @@
+{
+  "profile": "full",
+  "files": 731,
+  "dataset_registry": true,
+  "no_molecule_leakage": true,
+  "no_scaffold_leakage": true,
+  "deterministic_inference": true,
+  "limitations": "Scientific validity still requires full repeated and external evaluation."
+}

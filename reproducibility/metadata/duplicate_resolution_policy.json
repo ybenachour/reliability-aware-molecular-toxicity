@@ -1,0 +1,11 @@
+{
+  "created_at": "2026-07-26T15:36:15.675480+00:00",
+  "selected_policy": "remove_conflicts",
+  "alternatives_evaluated": [
+    "remove_conflicts",
+    "majority_vote",
+    "quality_filter",
+    "uncertain"
+  ],
+  "rationale": "The default removes molecule-endpoint groups with discordant observed labels rather than inventing consensus. Majority vote is available only as a documented sensitivity analysis; quality filtering requires source-level assay-quality metadata."
+}

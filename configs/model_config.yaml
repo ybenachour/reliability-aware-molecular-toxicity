@@ -1,0 +1,61 @@
+features:
+  descriptors:
+    remove_constant: true
+    impute: median
+    scale: robust
+  morgan:
+    radius: 2
+    n_bits: 2048
+    use_chirality: true
+    use_features: false
+  graph:
+    atom_features: [atomic_number, degree, formal_charge, hybridization, aromatic, total_h, chirality]
+    bond_features: [bond_type, conjugated, in_ring, stereo]
+
+qsar:
+  logistic_regression:
+    C: [0.01, 0.1, 1.0, 10.0]
+    class_weight: balanced
+    max_iter: 5000
+  random_forest:
+    n_estimators: [300, 700]
+    max_depth: [null, 12, 24]
+    min_samples_leaf: [1, 2, 5]
+    class_weight: balanced_subsample
+  svm:
+    C: [0.1, 1.0, 10.0]
+    gamma: [scale, auto]
+    class_weight: balanced
+    probability: true
+  gradient_boosting:
+    n_estimators: [200, 500]
+    learning_rate: [0.03, 0.1]
+    max_depth: [3, 6]
+
+neural:
+  fingerprint_mlp:
+    hidden_dims: [512, 256]
+    dropout: 0.25
+    batch_norm: true
+  multitask_mlp:
+    shared_dims: [512, 256]
+    head_dim: 128
+    dropout: 0.25
+  gnn:
+    architecture: GIN
+    hidden_dim: 128
+    layers: 4
+    dropout: 0.20
+    pooling: mean
+  multitask_gnn:
+    architecture: GIN
+    hidden_dim: 128
+    layers: 4
+    head_dim: 64
+    dropout: 0.20
+
+optional_pretrained:
+  enabled: false
+  model_name: null
+  version: null
+  license_verified: false
