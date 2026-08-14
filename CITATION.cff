@@ -6,7 +6,8 @@ authors:
   - family-names: Benachour
     given-names: Yassine
 version: 1.0.0
-date-released: 2026-08-12
+date-released: 2026-08-13
+doi: 10.5281/zenodo.21921230
 license: BSD-3-Clause
 keywords:
   - computational toxicology
