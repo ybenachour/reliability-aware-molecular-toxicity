@@ -20,10 +20,10 @@ jobs:
       - name: Download authoritative manuscript inputs from Dropbox
         run: |
           set -euo pipefail
-          curl -fL 'https://uc5a526723d49ef42a2a95f3635d.dl.dropboxusercontent.com/cd/0/get/DImqE6Z9dGoc7SKTdP4F8KbueTjurUU86lxWCaWdHEINK7_1MmPr5QcIgsPMnTBxv9uR7XVtPPuHGmGHkTZYYsR99zd6U-7I-J8MxX3B6ojC8xQNzOtOOwqsu_0947iXMUVk2UiGuFtJvhuImmZSrBX1F8bztUXxbUExiq7wuT1UIQ/file?c_luid=0ef9c1d7' -o /tmp/july.zip
-          curl -fL 'https://uc504ee70fcef76a5d698966d19b.dl.dropboxusercontent.com/cd/0/get/DIkHv5KvSrX69d4TPdgLUCyYcS9qS6pa7P-qUsozo5ot4JDxP5_kW7OQmdEMjqLhAqMWaJD0MsRZZaBvKqaF8W8gv4lxauqb4U4aAkASYnwn93Z9RpcQ7EvMU5Fo5h8KEkGQa_T8oLPxbI7uT20arc5wMgFVZP_wmhzBv6mQMA0Qkg/file?c_luid=0ef9c1d7' -o /tmp/final.tex
-          curl -fL 'https://uc7146089a0e1b93551d3801cf4c.dl.dropboxusercontent.com/cd/0/get/DIlce2d3hqJmS30O0zvHcn3-0vmrCpF7dKZZS_jqGRZL1LS9D_WXv8ZEqcVdYKcdtFC56zGZ5wscyNXcEMz9gNGrJENMizQ7USV5w4zMYUhnDVHyMcmUk7qzUT8jEjlnHBjyRSHgj8b8Jqhx0FJzPyadHldeeftHtAHirRgblAj5Pw/file?c_luid=0ef9c1d7' -o /tmp/final.bib
-          curl -fL 'https://uc17bf683ee4d294da021461351c.dl.dropboxusercontent.com/cd/0/get/DIkI6aUs8IfpM6XdbP-eUkwwcvRHhPf_X29yqP1M5mcwg1pgmkNqQGf0Q61ZvnjdEk1AJGFfwLLPkf49H9LwZ6bT5KO9pGw3FhKyMhBvcTNRZG4V-lS4709xFpiGX1FzGQm1S7Gxj4ykv0pnuiMx3OIYyVOUqJejB2GrCpK-pirxDg/file?c_luid=0ef9c1d7' -o /tmp/final_fig1.png
+          curl -fL 'https://uc8c257224252c8b05da1dec9e7b.dl.dropboxusercontent.com/cd/0/get/DIlYWMA8mkN7Zrzj5C9nnTYJv0wZRCOV4djtTrsy5saljK2H7741UdWPh5vOwKBLQvP3COrsIo7lrKof6hSORnCeVA5A8vrG5l_2dFnUpa7UYh5JbdhDwoeSF3ofQgh1PzTXI3-zNRp0PMOFTIrO2u0aS7TR0sLeqT2zuX_G7y5RPQ/file?c_luid=0ef9c1d7' -o /tmp/july.zip
+          curl -fL 'https://uc33ccfc64939c6c9ce2950aa863.dl.dropboxusercontent.com/cd/0/get/DIk2D6mfZgcr_MKV4piUap0wZDDAJa0k4iKca3PqL0waH5sDFjpKm0iV4X6VZJ6aXy0yUuthe6-EocUXAmxmmRQNZSo4yJNsMshHefQp5SIXpV5Hpu4RPBvwdE018QnJseyc-mYvOifJ83KJ6DQT936kvNn_ItkECIic6CTW6YS4HA/file?c_luid=0ef9c1d7' -o /tmp/final.tex
+          curl -fL 'https://uc7209b4f55be80c4a81fce3e605.dl.dropboxusercontent.com/cd/0/get/DInEiXRDrUdI3d0t_jAiIzeTu1Hu_CyMVBKMnLTNreYo_n4r2Jg83kVtr1aG_8DknU-fLDYOwzR2x07tqSQVBr7w5YyydMwMWPUqNeqr3wU_r-6TztJvgT3FpRKVS90BAu4hxD4deN1ZRAXNv4AcuofeLoz3m1aOnFMe5d7GLKkDpg/file?c_luid=0ef9c1d7' -o /tmp/final.bib
+          curl -fL 'https://uc740cdc0d9454d6c6ebbaa1c2e6.dl.dropboxusercontent.com/cd/0/get/DImSrpYvVfOUDwwSKNihF2OKTij-x1dpuR2qYLXFzoiWKkIJ17CEF-D-2LwdygCNotmUXIrKvReRpAKmWg2iRwrSG_Tnv397OVAltAJ3lJXG7Id5jJ5RJDTgr4P7YkcoMaoI_r78FXtScmbXk5WIuucdS5jOm2XAPs3UjMZIywV8Fw/file?c_luid=0ef9c1d7' -o /tmp/final_fig1.png
 
       - name: Prepare exact July project and final revised inputs
         run: |
