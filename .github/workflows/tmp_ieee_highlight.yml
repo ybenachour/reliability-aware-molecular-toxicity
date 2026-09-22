@@ -1,0 +1,106 @@
+name: IEEE highlighted manuscript build
+
+on:
+  push:
+    branches:
+      - tmp-ieee-highlight-build-20260922
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install LaTeX and diff tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-science texlive-font-utils latexdiff poppler-utils unzip
+
+      - name: Download authoritative manuscript inputs from Dropbox
+        run: |
+          set -euo pipefail
+          curl -fL 'https://uc5ec26d2d66a59e1573aacd50a5.dl.dropboxusercontent.com/cd/0/get/DIkBhfx7RiuxfYKh2VEYYi8En1Fn8OXz0W6AdxPpvqmfJG5uP5GBFXH7YSLa9nWzZw6U2D5J_vB8S_URyI5uSnfZVuqlbs4pyQ9MxRhvfPcE5S_hxAPaRB1c2IpP0Jl3FbJKRR50RjkVTwt5OT9iqcQa0Fv1Sz9COiJ1mGWOEcWDNg/file?c_luid=0ef9c1d7' -o /tmp/july.zip
+          curl -fL 'https://ucb6b5608a7fa6fb30774aa3b6e0.dl.dropboxusercontent.com/cd/0/get/DImwT4c8oPf3_bEEHesuKDgAdstqLUTt2Aw8PP1TpccB191wAdBz0Rc5u9Fo29W_BxCR_Jtyp0PukuhSrS892_TYHr878Pr9l34rXwxNzb7hIZSvSKfdCt1a6N41nmybCAZJBXuhbB1cFVSEsvuU-mpFr3-VL01iykBMVfCMc0tzvg/file?c_luid=0ef9c1d7' -o /tmp/final.tex
+          curl -fL 'https://uce8d0b929ff8c0c6a312e721fff.dl.dropboxusercontent.com/cd/0/get/DIk-cBYv9CDDAz0-zkMKFrUfSmj3G4PKORsqFAuZ_sb85_D_GGeMogWo_2J8K3Us6BpJ5_kZKiPH7HCzFaUBBvmWjtFgHwIn8e1wOkQlmECeGOhX9dz9oIs3Gp2hTD7L5lvZVQA3DIPP1yY-V_fuJCYwRF8p1dnfZ3Kdd9ikriVfKA/file?c_luid=0ef9c1d7' -o /tmp/final.bib
+          curl -fL 'https://uce37be273d91bbf7f846b0146f4.dl.dropboxusercontent.com/cd/0/get/DIkhHVTcw49rpADSRjim-F_abm8DXHpAB-Yvv0jSDNAtuWovQMgWeuU7XY9tnKUk5o16RPP5lb723EeM-ttTNPwwItKzbwMafPaVHRslEPuI52CosCiL-5tQMget06WABJqqR_6IC5cwreGPsROjammKVQrQr7jADof_W6AC4g-Ozg/file?c_luid=0ef9c1d7' -o /tmp/final_fig1.png
+
+      - name: Prepare exact July project and final revised inputs
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/ieee
+          mkdir -p /tmp/ieee
+          unzip -q /tmp/july.zip -d /tmp/ieee
+          BASE="$(dirname "$(find /tmp/ieee -type f -name 'IEEE_ACCESS_ML_Drug.tex' | head -n 1)")"
+          echo "BASE=$BASE" >> "$GITHUB_ENV"
+          cp "$BASE/IEEE_ACCESS_ML_Drug.tex" "$BASE/July2026_forDIFF.tex"
+          cp /tmp/final.tex "$BASE/IEEE_ACCESS_ML_Drug.tex"
+          mkdir -p "$BASE/biblio" "$BASE/figures"
+          cp /tmp/final.bib "$BASE/biblio/ml_drug_review_expanded_resubmission.bib"
+          cp /tmp/final_fig1.png "$BASE/figures/ml_drug_discovery_taxonomy.png"
+          echo "July SHA256: $(sha256sum "$BASE/July2026_forDIFF.tex" | awk '{print $1}')"
+          echo "Final SHA256: $(sha256sum "$BASE/IEEE_ACCESS_ML_Drug.tex" | awk '{print $1}')"
+
+      - name: Generate synchronized highlighted source
+        run: |
+          set -euo pipefail
+          cd "$BASE"
+          latexdiff --type=UNDERLINE --disable-citation-markup --floattype=FLOATSAFE \
+            July2026_forDIFF.tex IEEE_ACCESS_ML_Drug.tex > IEEE_ACCESS_ML_Drug_highlighted.tex
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path("IEEE_ACCESS_ML_Drug_highlighted.tex")
+          s=p.read_text()
+          s=s.replace(r'\providecommand{\DIFadd}[1]{{\protect\color{blue}\uwave{#1}}}',
+                      r'\providecommand{\DIFadd}[1]{{\protect\color{blue}#1}}')
+          p.write_text(s)
+          PY
+          grep -q '\\sout{#1}' IEEE_ACCESS_ML_Drug_highlighted.tex
+          grep -q 'Representative reported ADMET results' IEEE_ACCESS_ML_Drug_highlighted.tex
+          grep -q 'Mandatory gates for a toxicity-ready claim' IEEE_ACCESS_ML_Drug_highlighted.tex
+
+      - name: Compile highlighted manuscript
+        run: |
+          set -euo pipefail
+          cd "$BASE"
+          pdflatex -interaction=nonstopmode -halt-on-error IEEE_ACCESS_ML_Drug_highlighted.tex
+          bibtex IEEE_ACCESS_ML_Drug_highlighted
+          pdflatex -interaction=nonstopmode -halt-on-error IEEE_ACCESS_ML_Drug_highlighted.tex
+          pdflatex -interaction=nonstopmode -halt-on-error IEEE_ACCESS_ML_Drug_highlighted.tex
+
+      - name: Validate highlighted manuscript
+        run: |
+          set -euo pipefail
+          cd "$BASE"
+          pdftotext -layout IEEE_ACCESS_ML_Drug_highlighted.pdf highlighted.txt
+          {
+            echo "PDF pages: $(pdfinfo IEEE_ACCESS_ML_Drug_highlighted.pdf | awk '/^Pages:/ {print $2}')"
+            echo "Undefined markers: $(grep -o '\[?\]' highlighted.txt | wc -l)"
+            echo "Table 9 caption matches: $(grep -i -c 'Representative reported ADMET results' highlighted.txt)"
+            echo "Table 14 caption matches: $(grep -i -c 'Mandatory gates for a toxicity-ready claim' highlighted.txt)"
+            echo "3D generative subsection present: $(grep -i -c '3D GENERATIVE MODELING AND DOCKING' highlighted.txt)"
+            echo "LaTeX undefined citation warnings: $(grep -Eic 'Citation .* undefined|undefined citations' IEEE_ACCESS_ML_Drug_highlighted.log || true)"
+            echo "LaTeX fatal errors: $(grep -Eic 'Fatal error|Emergency stop|LaTeX Error' IEEE_ACCESS_ML_Drug_highlighted.log || true)"
+          } | tee HIGHLIGHTED_VALIDATION.txt
+          test "$(grep -o '\[?\]' highlighted.txt | wc -l)" -eq 0
+          grep -qi 'Representative reported ADMET results' highlighted.txt
+          grep -qi 'Mandatory gates for a toxicity-ready claim' highlighted.txt
+          grep -qi '3D GENERATIVE MODELING AND DOCKING' highlighted.txt
+          ! grep -Eqi 'Citation .* undefined|undefined citations' IEEE_ACCESS_ML_Drug_highlighted.log
+          ! grep -Eqi 'Fatal error|Emergency stop|LaTeX Error' IEEE_ACCESS_ML_Drug_highlighted.log
+
+      - name: Stage output
+        run: |
+          set -euo pipefail
+          mkdir -p artifact
+          cp "$BASE/IEEE_ACCESS_ML_Drug_highlighted.tex" artifact/
+          cp "$BASE/IEEE_ACCESS_ML_Drug_highlighted.pdf" artifact/
+          cp "$BASE/IEEE_ACCESS_ML_Drug_highlighted.log" artifact/
+          cp "$BASE/IEEE_ACCESS_ML_Drug_highlighted.bbl" artifact/
+          cp "$BASE/HIGHLIGHTED_VALIDATION.txt" artifact/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ieee-highlighted-final
+          path: artifact/
+          retention-days: 1
