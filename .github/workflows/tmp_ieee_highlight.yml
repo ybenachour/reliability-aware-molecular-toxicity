@@ -20,10 +20,10 @@ jobs:
       - name: Download authoritative manuscript inputs from Dropbox
         run: |
           set -euo pipefail
-          curl -fL 'https://uc8c257224252c8b05da1dec9e7b.dl.dropboxusercontent.com/cd/0/get/DIlYWMA8mkN7Zrzj5C9nnTYJv0wZRCOV4djtTrsy5saljK2H7741UdWPh5vOwKBLQvP3COrsIo7lrKof6hSORnCeVA5A8vrG5l_2dFnUpa7UYh5JbdhDwoeSF3ofQgh1PzTXI3-zNRp0PMOFTIrO2u0aS7TR0sLeqT2zuX_G7y5RPQ/file?c_luid=0ef9c1d7' -o /tmp/july.zip
-          curl -fL 'https://uc33ccfc64939c6c9ce2950aa863.dl.dropboxusercontent.com/cd/0/get/DIk2D6mfZgcr_MKV4piUap0wZDDAJa0k4iKca3PqL0waH5sDFjpKm0iV4X6VZJ6aXy0yUuthe6-EocUXAmxmmRQNZSo4yJNsMshHefQp5SIXpV5Hpu4RPBvwdE018QnJseyc-mYvOifJ83KJ6DQT936kvNn_ItkECIic6CTW6YS4HA/file?c_luid=0ef9c1d7' -o /tmp/final.tex
-          curl -fL 'https://uc7209b4f55be80c4a81fce3e605.dl.dropboxusercontent.com/cd/0/get/DInEiXRDrUdI3d0t_jAiIzeTu1Hu_CyMVBKMnLTNreYo_n4r2Jg83kVtr1aG_8DknU-fLDYOwzR2x07tqSQVBr7w5YyydMwMWPUqNeqr3wU_r-6TztJvgT3FpRKVS90BAu4hxD4deN1ZRAXNv4AcuofeLoz3m1aOnFMe5d7GLKkDpg/file?c_luid=0ef9c1d7' -o /tmp/final.bib
-          curl -fL 'https://uc740cdc0d9454d6c6ebbaa1c2e6.dl.dropboxusercontent.com/cd/0/get/DImSrpYvVfOUDwwSKNihF2OKTij-x1dpuR2qYLXFzoiWKkIJ17CEF-D-2LwdygCNotmUXIrKvReRpAKmWg2iRwrSG_Tnv397OVAltAJ3lJXG7Id5jJ5RJDTgr4P7YkcoMaoI_r78FXtScmbXk5WIuucdS5jOm2XAPs3UjMZIywV8Fw/file?c_luid=0ef9c1d7' -o /tmp/final_fig1.png
+          curl -fL 'https://uc22f7974f69c07d10b349b744dd.dl.dropboxusercontent.com/cd/0/get/DIlUMZHIbYWDr8bfVD7M99OSp2TNHDpu6GtfFmREE_2KrUcnggHASzyiCaZPMBQScJKzRRE7ujG1uZvNogreKr9mthUCFZHAmwFydMXT9szJhyt_qtivNzpGqozrttNkJNF54yexmzZL_bHCkaZ0jiJtXs7haES7EgFe6I6n0wobQQ/file?c_luid=0ef9c1d7' -o /tmp/july.zip
+          curl -fL 'https://ucb63b6852a4d41ad9ce9199a761.dl.dropboxusercontent.com/cd/0/get/DIk5xM4PRwo6Y0oFX8c6HaLal2LNKQ-qpraTK6jHZ45S5glw1ElaOuktyf8rCDuTDkz6LqXaC3f2zyEtiK_xvKjHHqkeoAXM6Fsq3bmIzBSil7VdlldAp-iKzpnKkWcNiNFUX_VX7tzb3Gs7wfh0A87u8H5aAwaTn70EdbUrA03heQ/file?c_luid=0ef9c1d7' -o /tmp/final.tex
+          curl -fL 'https://ucb77f1e5969eebd2ab2771f8e00.dl.dropboxusercontent.com/cd/0/get/DInG4ZaBOZfuA0Xrv_AtAHhp70P-x2rZWvg788wB1-22kKtKF1pMHFXmnWtdwojYxFlcBYShi791mbOOEbbwM0V7EUnTh79DfYDhPDrstDXbyzZ0yFJCg46GuA4Hyw5ENCNNlxWac_dasvDGJMunjY8aT86IlyUtSaEN7itgLWr85A/file?c_luid=0ef9c1d7' -o /tmp/final.bib
+          curl -fL 'https://uc712aa828556380d19c210622f6.dl.dropboxusercontent.com/cd/0/get/DIkdNy7R69MSJZzsw54gtc540BdNwyhsmeP_rHs_kXLcZk3x6U-vTffhPIeOOUHx7tiNFQxigfITDr-9-JpcHKW4u9rqEPzn0lrlMAbBQ-ASCReSJLxqLl1A8yfXnfmORJKmWILgaHVfKOEJtmHuSwL-z0mfWyOQr5H8sJZxXUkpNA/file?c_luid=0ef9c1d7' -o /tmp/final_fig1.png
 
       - name: Prepare exact July project and final revised inputs
         run: |
@@ -43,10 +43,15 @@ jobs:
 
       - name: Generate synchronized highlighted source
         run: |
-          set -euo pipefail
+          set -u
           cd "$BASE"
+          set +e
           latexdiff --type=UNDERLINE --disable-citation-markup --floattype=FLOATSAFE \
             July2026_forDIFF.tex IEEE_ACCESS_ML_Drug.tex > IEEE_ACCESS_ML_Drug_highlighted.tex
+          LD_STATUS=$?
+          set -e
+          echo "latexdiff status: $LD_STATUS"
+          test -s IEEE_ACCESS_ML_Drug_highlighted.tex
           python3 - <<'PY'
           from pathlib import Path
           p=Path("IEEE_ACCESS_ML_Drug_highlighted.tex")
@@ -54,10 +59,11 @@ jobs:
           s=s.replace(r'\providecommand{\DIFadd}[1]{{\protect\color{blue}\uwave{#1}}}',
                       r'\providecommand{\DIFadd}[1]{{\protect\color{blue}#1}}')
           p.write_text(s)
+          print("highlighted source bytes:", p.stat().st_size)
+          print("contains sout:", r'\sout' in s)
+          print("contains quantitative table:", 'Representative reported ADMET results' in s)
+          print("contains Table-14 caption:", 'Mandatory gates for a toxicity-ready claim' in s)
           PY
-          grep -Fq '\sout{#1}' IEEE_ACCESS_ML_Drug_highlighted.tex
-          grep -Fq 'Representative reported ADMET results' IEEE_ACCESS_ML_Drug_highlighted.tex
-          grep -Fq 'Mandatory gates for a toxicity-ready claim' IEEE_ACCESS_ML_Drug_highlighted.tex
 
       - name: Compile highlighted manuscript
         run: |
