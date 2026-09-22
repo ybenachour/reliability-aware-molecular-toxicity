@@ -1,4 +1,4 @@
-name: IEEE highlighted manuscript build
+name: IEEE highlighted diff diagnostic
 
 on:
   push:
@@ -6,118 +6,31 @@ on:
       - tmp-ieee-highlight-build-20260922
 
 jobs:
-  build:
+  diagnose:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install LaTeX and diff tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-science texlive-font-utils latexdiff poppler-utils unzip
-
-      - name: Download authoritative manuscript inputs from Dropbox
+      - name: Get latexdiff and manuscript inputs
         run: |
           set -euo pipefail
-          curl -fL 'https://uc22f7974f69c07d10b349b744dd.dl.dropboxusercontent.com/cd/0/get/DIlUMZHIbYWDr8bfVD7M99OSp2TNHDpu6GtfFmREE_2KrUcnggHASzyiCaZPMBQScJKzRRE7ujG1uZvNogreKr9mthUCFZHAmwFydMXT9szJhyt_qtivNzpGqozrttNkJNF54yexmzZL_bHCkaZ0jiJtXs7haES7EgFe6I6n0wobQQ/file?c_luid=0ef9c1d7' -o /tmp/july.zip
-          curl -fL 'https://ucb63b6852a4d41ad9ce9199a761.dl.dropboxusercontent.com/cd/0/get/DIk5xM4PRwo6Y0oFX8c6HaLal2LNKQ-qpraTK6jHZ45S5glw1ElaOuktyf8rCDuTDkz6LqXaC3f2zyEtiK_xvKjHHqkeoAXM6Fsq3bmIzBSil7VdlldAp-iKzpnKkWcNiNFUX_VX7tzb3Gs7wfh0A87u8H5aAwaTn70EdbUrA03heQ/file?c_luid=0ef9c1d7' -o /tmp/final.tex
-          curl -fL 'https://ucb77f1e5969eebd2ab2771f8e00.dl.dropboxusercontent.com/cd/0/get/DInG4ZaBOZfuA0Xrv_AtAHhp70P-x2rZWvg788wB1-22kKtKF1pMHFXmnWtdwojYxFlcBYShi791mbOOEbbwM0V7EUnTh79DfYDhPDrstDXbyzZ0yFJCg46GuA4Hyw5ENCNNlxWac_dasvDGJMunjY8aT86IlyUtSaEN7itgLWr85A/file?c_luid=0ef9c1d7' -o /tmp/final.bib
-          curl -fL 'https://uc712aa828556380d19c210622f6.dl.dropboxusercontent.com/cd/0/get/DIkdNy7R69MSJZzsw54gtc540BdNwyhsmeP_rHs_kXLcZk3x6U-vTffhPIeOOUHx7tiNFQxigfITDr-9-JpcHKW4u9rqEPzn0lrlMAbBQ-ASCReSJLxqLl1A8yfXnfmORJKmWILgaHVfKOEJtmHuSwL-z0mfWyOQr5H8sJZxXUkpNA/file?c_luid=0ef9c1d7' -o /tmp/final_fig1.png
-
-      - name: Prepare exact July project and final revised inputs
-        run: |
-          set -euo pipefail
-          rm -rf /tmp/ieee
+          curl -fsSL https://raw.githubusercontent.com/ftilmann/latexdiff/master/latexdiff -o /tmp/latexdiff
+          chmod +x /tmp/latexdiff
+          curl -fL 'https://ucb145425fea013567c084188a5b.dl.dropboxusercontent.com/cd/0/get/DInV3pJXXaLYGt57L1jhfrcdGty33tJFOz0hGa2p5FiY7PwrBvQhvmWB-K263RL0d3ZHBv9NB_dV7_AMgTC7R8okPrkMxwehD49Er9-znEcsPvNUh0wlqPh06chpBIMR_cyMppyPL21SKdBa0Tjpsaz7Z_5fEnL4yXXOWD9fVRb5DQ/file?c_luid=0ef9c1d7' -o /tmp/july.zip
+          curl -fL 'https://uc1abc2f11315e0baa3bc1ebf557.dl.dropboxusercontent.com/cd/0/get/DIn7nUbfxT7kjl0bWNIDlUq-TSCCr81fUIwC5HVC8B5ckRFm7qlcH556tkjsmJcnsBnjfqyyPEqV5JqyRKhXOw9ne-8OW-rApOvc6W5rLB5GL-9YSX0vFUqF8zFeORWOEUtEremD3cnA-CbweSGIUr__zDG_NPIuMYo9eGgxwWn6Mg/file?c_luid=0ef9c1d7' -o /tmp/final.tex
           mkdir -p /tmp/ieee
           unzip -q /tmp/july.zip -d /tmp/ieee
           BASE="$(dirname "$(find /tmp/ieee -type f -name 'IEEE_ACCESS_ML_Drug.tex' | head -n 1)")"
-          echo "BASE=$BASE" >> "$GITHUB_ENV"
           cp "$BASE/IEEE_ACCESS_ML_Drug.tex" "$BASE/July2026_forDIFF.tex"
           cp /tmp/final.tex "$BASE/IEEE_ACCESS_ML_Drug.tex"
-          mkdir -p "$BASE/biblio" "$BASE/figures"
-          cp /tmp/final.bib "$BASE/biblio/ml_drug_review_expanded_resubmission.bib"
-          cp /tmp/final_fig1.png "$BASE/figures/ml_drug_discovery_taxonomy.png"
-          echo "July SHA256: $(sha256sum "$BASE/July2026_forDIFF.tex" | awk '{print $1}')"
-          echo "Final SHA256: $(sha256sum "$BASE/IEEE_ACCESS_ML_Drug.tex" | awk '{print $1}')"
-
-      - name: Generate synchronized highlighted source
-        run: |
-          set -u
           cd "$BASE"
           set +e
-          latexdiff --type=UNDERLINE --disable-citation-markup --floattype=FLOATSAFE \
-            July2026_forDIFF.tex IEEE_ACCESS_ML_Drug.tex > IEEE_ACCESS_ML_Drug_highlighted.tex
-          LD_STATUS=$?
+          /tmp/latexdiff --type=UNDERLINE --disable-citation-markup --floattype=FLOATSAFE July2026_forDIFF.tex IEEE_ACCESS_ML_Drug.tex > highlighted.tex
+          echo "latexdiff status=$?"
           set -e
-          echo "latexdiff status: $LD_STATUS"
-          test -s IEEE_ACCESS_ML_Drug_highlighted.tex
-          python3 - <<'PY'
-          from pathlib import Path
-          p=Path("IEEE_ACCESS_ML_Drug_highlighted.tex")
-          s=p.read_text()
-          s=s.replace(r'\providecommand{\DIFadd}[1]{{\protect\color{blue}\uwave{#1}}}',
-                      r'\providecommand{\DIFadd}[1]{{\protect\color{blue}#1}}')
-          p.write_text(s)
-          print("highlighted source bytes:", p.stat().st_size)
-          print("contains sout:", r'\sout' in s)
-          print("contains quantitative table:", 'Representative reported ADMET results' in s)
-          print("contains Table-14 caption:", 'Mandatory gates for a toxicity-ready claim' in s)
-          PY
-
-      - name: Compile highlighted manuscript
-        run: |
-          set -euo pipefail
-          cd "$BASE"
-          pdflatex -interaction=nonstopmode -halt-on-error IEEE_ACCESS_ML_Drug_highlighted.tex
-          bibtex IEEE_ACCESS_ML_Drug_highlighted
-          pdflatex -interaction=nonstopmode -halt-on-error IEEE_ACCESS_ML_Drug_highlighted.tex
-          pdflatex -interaction=nonstopmode -halt-on-error IEEE_ACCESS_ML_Drug_highlighted.tex
-
-      - name: Validate highlighted manuscript
-        run: |
-          set -euo pipefail
-          cd "$BASE"
-          pdftotext -layout IEEE_ACCESS_ML_Drug_highlighted.pdf highlighted.txt
-          PAGES="$(pdfinfo IEEE_ACCESS_ML_Drug_highlighted.pdf | awk '/^Pages:/ {print $2}')"
-          UNDEF="$(grep -o '\[?\]' highlighted.txt | wc -l)"
-          CITEWARN="$(grep -Eic 'Citation .* undefined|undefined citations' IEEE_ACCESS_ML_Drug_highlighted.log || true)"
-          FATAL="$(grep -Eic 'Fatal error|Emergency stop|LaTeX Error' IEEE_ACCESS_ML_Drug_highlighted.log || true)"
-          T9="$(grep -Ec '\\newlabel\{tab:representative_admet_results\}\{\{9\}' IEEE_ACCESS_ML_Drug_highlighted.aux || true)"
-          T14="$(grep -Ec '\\newlabel\{tab:toxicity_ready_gates\}\{\{14\}' IEEE_ACCESS_ML_Drug_highlighted.aux || true)"
-          {
-            echo "PDF pages: $PAGES"
-            echo "Undefined markers: $UNDEF"
-            echo "Table 9 label correct: $T9"
-            echo "Table 14 label correct: $T14"
-            echo "Quantitative caption present: $(grep -i -c 'Representative reported ADMET results' highlighted.txt || true)"
-            echo "Mandatory-gates caption present: $(grep -i -c 'Mandatory gates for a toxicity-ready claim' highlighted.txt || true)"
-            echo "3D generative subsection present: $(grep -i -c '3D GENERATIVE MODELING AND DOCKING' highlighted.txt || true)"
-            echo "LaTeX undefined citation warnings: $CITEWARN"
-            echo "LaTeX fatal errors: $FATAL"
-          } | tee HIGHLIGHTED_VALIDATION.txt
-          test "$UNDEF" -eq 0
-          test "$CITEWARN" -eq 0
-          test "$FATAL" -eq 0
-          test "$T9" -ge 1
-          test "$T14" -ge 1
-          grep -qi 'Representative reported ADMET results' highlighted.txt
-          grep -qi 'Mandatory gates for a toxicity-ready claim' highlighted.txt
-          grep -qi '3D GENERATIVE MODELING AND DOCKING' highlighted.txt
-
-      - name: Stage output
-        run: |
-          set -euo pipefail
-          mkdir -p artifact
-          cp "$BASE/IEEE_ACCESS_ML_Drug_highlighted.tex" artifact/
-          cp "$BASE/IEEE_ACCESS_ML_Drug_highlighted.pdf" artifact/
-          cp "$BASE/IEEE_ACCESS_ML_Drug_highlighted.log" artifact/
-          cp "$BASE/IEEE_ACCESS_ML_Drug_highlighted.bbl" artifact/
-          cp "$BASE/IEEE_ACCESS_ML_Drug_highlighted.aux" artifact/
-          cp "$BASE/HIGHLIGHTED_VALIDATION.txt" artifact/
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: ieee-highlighted-final
-          path: artifact/
-          retention-days: 1
+          echo '=== DIF PREAMBLE ==='
+          grep -n -E 'DIF(add|del)(FL)?|ulem' highlighted.tex | head -n 30 || true
+          echo '=== TOPRULE CONTEXTS ==='
+          grep -n -B6 -A6 '\\toprule' highlighted.tex | head -n 240 || true
+          echo '=== PROBLEM PATTERNS ==='
+          grep -n -E 'DIF(add|del)(begin|end)FL.*\\(toprule|midrule|bottomrule)|\\begin\{tabular\}.*DIF' highlighted.tex | head -n 100 || true
